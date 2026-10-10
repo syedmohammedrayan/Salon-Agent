@@ -1,0 +1,1742 @@
+{
+  "name": "Salon-MultiAgent-WorkFlow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "37f14ded-8b5d-48f5-aafc-ace2edddcd5e",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1168,
+        -16
+      ],
+      "id": "0ea048f1-759f-490b-ae15-4ff7cb3e29b2",
+      "name": "Webhook",
+      "webhookId": "37f14ded-8b5d-48f5-aafc-ace2edddcd5e"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        240
+      ],
+      "id": "cbf47271-eac3-4570-a917-3ba257f184d4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.sessionId }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        1472,
+        240
+      ],
+      "id": "79caf77a-2a2c-45bb-b7eb-e91955350fde",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "appointment",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "5a971caf-e6c0-4f06-8175-41a1b0f3e0b3"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2170d963-67a2-4b94-b1f6-fe19b7031e43",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "faq",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9e943eaa-dc3c-4b7e-a578-682af375b519",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "deals",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "079f429f-37ef-41a1-ab00-af303a57c7a6",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "complaint",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6007febf-93cf-490a-9ecc-bd243fa9fd64",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "human",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b4b279bd-9f5d-40ed-a61b-4e350c88d459",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "greeting",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1744,
+        -64
+      ],
+      "id": "12658b99-2f59-4c7d-9bbb-a138c91f62c6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFile",
+        "fileToWatch": {
+          "__rl": true,
+          "value": "1Sbo7ljHg9xidB8JKyIL2Ql5KuWXHb3BD",
+          "mode": "list",
+          "cachedResultName": "Aura_Botanica_Salon-v2.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1Sbo7ljHg9xidB8JKyIL2Ql5KuWXHb3BD/view?usp=drivesdk"
+        }
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        336,
+        1840
+      ],
+      "id": "16461176-30b0-4775-a255-e25b7558d052",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kjYIigLcyhPisjRE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1Sbo7ljHg9xidB8JKyIL2Ql5KuWXHb3BD",
+          "mode": "list",
+          "cachedResultName": "Aura_Botanica_Salon-v2.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1Sbo7ljHg9xidB8JKyIL2Ql5KuWXHb3BD/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        544,
+        1840
+      ],
+      "id": "0e6c3760-85da-40a4-acb2-3666b7275af7",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kjYIigLcyhPisjRE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        2144
+      ],
+      "id": "87859395-dfe3-4570-a0cd-3581dbad37de",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        704,
+        2144
+      ],
+      "id": "351521eb-8823-4da8-9320-1859bfb40f53",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        -224
+      ],
+      "id": "bf18cf9f-2988-41bb-9fbb-bf78d9bf49fc",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        -32
+      ],
+      "id": "8d434faf-a994-456c-9321-0393b9b31102",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        2320,
+        -224
+      ],
+      "id": "0d946e09-7d95-4285-b5cc-50b24ab86375",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "You are the Salon AI Receptionist and Parent Agent.\n\nYour role is to identify the customer's intent and route the conversation to the correct specialist agent. You handle greetings yourself directly — you do not route greetings to any other agent.\n\nOutput Format\nReturn ONLY a valid JSON object.\n\nFor appointment, faq, complaint, deals, or human intents, use this format:\n{\n\"intent\": \"faq\",\n\"user_query\": \"What are your business hours?\",\n\"session_id\": \"abc123\",\n\"response\": null\n}\n\nFor greeting intent, use this format:\n{\n\"intent\": \"greeting\",\n\"user_query\": \"Hi\",\n\"session_id\": \"abc123\",\n\"response\": \"Hello! Welcome to Aura & Botanica Salon. I'm here to help you book an appointment, answer questions, share our current offers, or connect you with our team. How can I help you today?\"\n}\n\nDefinitions for the JSON Output:\nintent: The destination agent. Must be exactly one of the following: appointment, faq, complaint, deals, human, or greeting.\nuser_query: The exact, unmodified message provided by the user.\nsession_id: The customer's session identifier, passed exactly as received. Never modify or invent this value.\nresponse: Only filled when intent is \"greeting\" — a warm, professional welcome reply written by you. For all other intents, this must be null.\n\nDo not return any explanation, markdown, code fences, or additional text.\nOnly return the JSON object.\n\nAvailable Agents\n1. Appointment Agent — Booking, rescheduling, cancelling, checking availability, confirming appointment details.\n2. FAQ Agent — Salon services, pricing, business hours, location, policies, general information.\n3. Complaints Agent — Problems, complaints, dissatisfaction, service or appointment issues.\n4. Deals Agent — Discounts, promotions, packages, seasonal offers, special deals.\n5. Human Support Agent — Wants to speak with a human, requests a manager, asks for contact details, needs help beyond AI's capability.\n\nGreeting\nIf the user only says \"Hi\", \"Hello\", \"Hey\", or a similar simple greeting, set intent to \"greeting\" and write a warm, professional welcome reply yourself in the \"response\" field. Do not route this to any other agent.\n\nRules\nIdentify the customer's primary intent.\nRoute to only one agent (except greeting, which you answer yourself).\nIf the request is unclear, ask one brief clarifying question before routing (set intent to \"human\" as fallback, and put the clarifying question in \"user_query\").\nDo not answer specialist queries yourself (appointment, faq, complaint, deals).\nNever invent information.\nAlways be polite, professional, and concise."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1376,
+        -16
+      ],
+      "id": "a2f63e44-93ea-4334-8d59-fdba0d2bbe2a",
+      "name": "Salon Parent Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.parse($json.output).user_query }}",
+        "options": {
+          "systemMessage": "=You are the FAQ Specialist Agent for Aura & Botanica Salon.\n\nYour job is to answer customer questions about:\n- Salon services\n- Prices\n- Business hours and timings\n- Location\n- Policies\n- General salon information\n\nKNOWLEDGE BASE RULES:\n\nYou have access to the salon's official knowledge base through the Pinecone knowledge base tool.\n\nYou MUST search the knowledge base before answering EVERY customer question.\n\nDo NOT answer from your general knowledge.\n\nIf the customer asks about:\n- opening hours\n- timings\n- schedule\n- working hours\n- salon hours\n- when the salon opens\n- when the salon closes\n\nyou MUST search the knowledge base for the \"Business Hours\" information first.\n\nUse the information returned by the knowledge base to answer the customer accurately.\n\nIf the knowledge base contains the requested information:\n- Give the exact information found in the knowledge base.\n- Do not change, assume, or invent any details.\n- Keep the response concise and professional.\n\nIf the knowledge base does NOT contain the requested information, respond:\n\n\"I apologize, but I don't have the exact information regarding that at the moment. Would you like me to connect you with our human support team or a salon manager who can assist you further?\"\n\nIMPORTANT:\nNever use the fallback response if the requested information exists in the knowledge base.\n\nFor example, if the knowledge base contains the salon's business hours and the customer asks:\n\"What time do you open?\"\n\nyou MUST return the business hours from the knowledge base.\n\nOut of Scope:\nIf the customer wants to:\n- Book an appointment\n- Reschedule an appointment\n- Cancel an appointment\n- Make a complaint\n## Response Formatting\n\nAlways return clean plain text.\n\nDo NOT use:\n- Markdown\n- Asterisks (*)\n- Double asterisks (**)\n- Hashtags (#)\n- Markdown headings\n- Markdown tables\n- Code blocks\n\nDo not copy Markdown formatting from the knowledge base.\n\nConvert any Markdown formatting retrieved from the knowledge base into clean plain text.\n\nFor business hours, format the response like this:\n\nOur business hours are:\n\nMonday - Thursday: 10:00 AM - 8:00 PM\nFriday - Saturday: 11:00 AM - 9:00 PM\nSunday: Closed (Rest & Reset)\nDo not handle the request. The Parent Agent should route these requests to the appropriate specialist.\n\nTone:\nElegant, warm, calm, professional, and concise."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2240,
+        -512
+      ],
+      "id": "edb68907-d8c3-431a-9ef8-16602856bed4",
+      "name": "FAQ Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2256,
+        416
+      ],
+      "id": "8161457a-cc23-479b-ac9e-916e0610cdd1",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HaelLiaoQLknUVNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        2416,
+        416
+      ],
+      "id": "29200656-1fee-4a9b-bbd5-e5ce3ae6a40f",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        624
+      ],
+      "id": "2758557c-6fd7-4a0c-8323-a7194b60387b",
+      "name": "Embeddings Google Gemini2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.parse($json.output).user_query }}",
+        "options": {
+          "systemMessage": "You are the Deals & Offers Specialist Agent for Aura & Botanica Salon.\n\nYour responsibility is to help customers discover and understand the salon's current deals, discounts, packages, promotions, and special offers.\n\n## RAG RULE\n\nYou have access to the official Aura & Botanica Salon Deals & Discounts knowledge base through the Pinecone tool.\n\nYou MUST search the knowledge base before answering every deals-related question.\n\nAll deal information must come strictly from the retrieved knowledge base.\n\nNever invent, assume, or modify:\n- Deal names\n- Prices\n- Discounts\n- Services included\n- Validity\n- Eligibility\n- Terms and conditions\n\n## GENERAL DEALS QUESTIONS\n\nIf the customer asks a broad question such as:\n\n\"What deals do you have?\"\n\"What offers are available?\"\n\"Do you have any discounts?\"\n\"Any promotions?\"\n\"What packages do you offer?\"\n\nDo NOT list every deal and do NOT overwhelm the customer with all available offers.\n\nInstead, search the knowledge base and provide a short overview of the available deal categories.\n\nFor example:\n\n\"We currently have several exclusive offers, including:\n\n1. Bridal Packages\n2. Everyday Pampering Bundles\n3. Student & Tech Professional Discounts\n4. Happy Hour Deals\n\nWhich type of offer would you like to explore?\"\n\nThen wait for the customer's choice.\n\n## SPECIFIC DEAL QUESTIONS\n\nIf the customer asks about a specific deal, provide the relevant information directly.\n\nFor example:\n\n\"What is the Glow & Go package?\"\n\nAnswer with the package name, included services, package price, regular value, and any important applicable terms found in the knowledge base.\n\nDo not ask the customer which deal they mean when they have already specified a deal.\n\n## CATEGORY QUESTIONS\n\nIf the customer asks about a category, such as:\n\n\"What bridal deals do you have?\"\n\"Do you have student discounts?\"\n\"What offers do you have for tech professionals?\"\n\nSearch the knowledge base and provide the relevant offers from that category.\n\nDo not provide unrelated deals.\n\n## RECOMMENDATION\n\nIf the customer describes what they want without naming a specific deal, use the knowledge base to identify the most relevant deal or category.\n\nFor example:\n\nCustomer:\n\"I need something for my wedding.\"\n\nResponse:\n\"We have several Bridal Escapade packages. Would you like to explore our 3-Day Royal Botanica Bride package, 1-Day Minimalist Elegance package, or Bridesmaid Squad package?\"\n\n## MISSING INFORMATION\n\nIf the requested deal or information is not found in the knowledge base, respond:\n\n\"I apologize, but I don't have the exact information about that offer at the moment. Would you like me to connect you with our human support team or a salon manager who can assist you further?\"\n\nNever make up an offer.\n\n## TERMS & CONDITIONS\n\nWhen relevant, mention important conditions retrieved from the knowledge base, such as:\n- Prior booking requirements\n- ID requirements\n- Offer validity\n- Happy Hour timings\n- Bridal deposit requirements\n- Cancellation policies\n\nDo not mention every term unless it is relevant to the customer's question.\n\n## RESPONSE FORMATTING\n\nUse clean plain text only.\n\nDo NOT use:\n- Markdown\n- Asterisks\n- Double asterisks\n- Hashtags\n- Markdown tables\n- Code blocks\n\nUse short paragraphs and simple numbered lists when necessary.\n\n## OUT OF SCOPE\n\nDo not handle:\n- Appointment booking\n- Appointment rescheduling\n- Appointment cancellation\n- Complaints\n- Human support requests\n\nThese should be handled by the appropriate specialist agent.\n\n## TONE\n\nBe warm, elegant, calm, helpful, and professional.\n\nKeep responses concise and conversational.\n\nYour goal is to help the customer discover the most relevant salon offer without overwhelming them with unnecessary information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2320,
+        128
+      ],
+      "id": "f7f4dcd0-87a2-46d6-a111-f3a1f43983d9",
+      "name": "Deal Agent"
+    },
+    {
+      "parameters": {
+        "content": "Salon FAQ Data Ingestion",
+        "height": 80,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        560,
+        1728
+      ],
+      "typeVersion": 1,
+      "id": "aba26983-4cdf-43e6-b40a-fdbf9ced9823",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFile",
+        "fileToWatch": {
+          "__rl": true,
+          "value": "1XlszJxxIDsKJuQAYLBybIvypzl5PvCcd",
+          "mode": "list",
+          "cachedResultName": "Aura_Botanica_Deals_Discounts.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1XlszJxxIDsKJuQAYLBybIvypzl5PvCcd/view?usp=drivesdk"
+        }
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        1872
+      ],
+      "id": "49b3adc3-8dc3-4bf1-8c06-d36320542d86",
+      "name": "Google Drive Trigger1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kjYIigLcyhPisjRE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1XlszJxxIDsKJuQAYLBybIvypzl5PvCcd",
+          "mode": "list",
+          "cachedResultName": "Aura_Botanica_Deals_Discounts.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1XlszJxxIDsKJuQAYLBybIvypzl5PvCcd/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1744,
+        1872
+      ],
+      "id": "ed23758b-9931-4c63-a08c-92f05dda9f05",
+      "name": "Download file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "kjYIigLcyhPisjRE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        2096,
+        2176
+      ],
+      "id": "1421d63c-ee2e-4f94-a0ec-c68113b227ba",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1904,
+        2176
+      ],
+      "id": "f4b199a5-0bfc-4fd5-b65b-0a823f90feb6",
+      "name": "Embeddings Google Gemini3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FEQLZHLPvCW4kpTL",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "salon-assistant",
+          "mode": "list",
+          "cachedResultName": "salon-assistant"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        752,
+        1840
+      ],
+      "id": "3abf8e72-3418-44a4-99eb-c98a84ab20ff",
+      "name": "Salon FAQ Insertion",
+      "credentials": {
+        "pineconeApi": {
+          "id": "Y5NFZvobxPaWdkWp",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "salon-deal-assistant",
+          "mode": "list",
+          "cachedResultName": "salon-deal-assistant"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        1952,
+        1872
+      ],
+      "id": "7e22b057-6020-4b0a-8a4f-79dcd621f8ba",
+      "name": "Salon Deal Ingestion",
+      "credentials": {
+        "pineconeApi": {
+          "id": "Y5NFZvobxPaWdkWp",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Salon Deal Ingestion\n",
+        "height": 80,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        1744
+      ],
+      "typeVersion": 1,
+      "id": "c5e66751-4454-4d81-8d89-03111a7d60f5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cf7651ab-cde0-4dd9-adf5-553576321fa1",
+              "leftValue": "={{ $json.urgency }}",
+              "rightValue": "Urgent",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3024,
+        2016
+      ],
+      "id": "26705df9-8c30-4367-97e7-7582b43d16ca",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "ayeshahmad1106@gmail.com",
+        "subject": "=🚨 Urgent Complaint - {{ $json.name }}",
+        "message": "=Name: {{ $json.name }}\nPhone: {{ $json.phone }} \nCategory: {{ $json.category }} \nDescription: {{ $json.description }} \nTime: {{ $json.timestamp }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3296,
+        1888
+      ],
+      "id": "285fe925-4af1-4c87-b466-af129fd8af53",
+      "name": "Send a message",
+      "webhookId": "e5da4063-08b1-457c-8825-9407a3f493c7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "4X1UlNAAlnwrv8e0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1BXmvav0mL_QR27H6i2zU_cK0IPKYqquaJa8OEtSj5Ng",
+          "mode": "list",
+          "cachedResultName": "Complaint Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BXmvav0mL_QR27H6i2zU_cK0IPKYqquaJa8OEtSj5Ng/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1483365730,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BXmvav0mL_QR27H6i2zU_cK0IPKYqquaJa8OEtSj5Ng/edit#gid=1483365730"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        2576,
+        2016
+      ],
+      "id": "a96a8521-7c00-40cb-ada0-b73832c2a225",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "DP1xRu5Di1kPLCIw",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $input.item.json;\nreturn {\n  json: {\n    name: row['Name'],\n    phone: row['Phone No'],\n    category: row['Complaint Category'],\n    urgency: row['Severity'] || 'Not Urgent',\n    description: row['Description'],\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2784,
+        2016
+      ],
+      "id": "f5042eb1-3df1-4de3-8bf0-793ced3c17a2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_nUzsGr-Vg2myrXuHHR9wvg3F3AdjFN22F60geEoAig",
+          "mode": "list",
+          "cachedResultName": "Salon-Complaint",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_nUzsGr-Vg2myrXuHHR9wvg3F3AdjFN22F60geEoAig/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_nUzsGr-Vg2myrXuHHR9wvg3F3AdjFN22F60geEoAig/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "name": "={{ $json.name }}",
+            "phone": "={{ $json.phone }}",
+            "category": "={{ $json.category }}",
+            "urgency": "={{ $json.urgency }}",
+            "description": "={{ $json.description }}",
+            "severity": "={{ $json.urgency }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3472,
+        2032
+      ],
+      "id": "beb96e6f-dbef-4996-b55a-4ae7b927d799",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zoviDRIyqUPQhKg6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Complaint Sheet and Email",
+        "height": 80,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2960,
+        1696
+      ],
+      "typeVersion": 1,
+      "id": "784db9dd-167a-4629-91fa-608652edfd6c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2112,
+        -704
+      ],
+      "id": "f23d5999-a544-42fc-856f-0765eb60d239",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HaelLiaoQLknUVNW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=={{ $('Webhook').first().json.body.sessionId }}",
+        "contextWindowLength": 8
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        2288,
+        -704
+      ],
+      "id": "ed150656-fd60-42ea-aa06-5816dce2fb3c",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.parse($json.output).user_query }}",
+        "options": {
+          "systemMessage": "Today's date is {{ $now.format('EEEE, MMMM d, yyyy') }}. Always use this as the reference point when interpreting relative dates like \"tomorrow\", \"next Monday\", or when the customer gives a date without a year. Never assume a year on your own — always calculate it based on today's actual date.\nYou are the Appointment Specialist Agent for Aura & Botanica Salon.\n\nYour job is to help customers book, check availability for, reschedule, or cancel appointments.\n\nRULES:\n1. Always collect these details before booking: service name, preferred date, preferred time, customer name, phone number. If anything is missing, ask for it — do not assume.\n2. Always check calendar availability using the calendar tool BEFORE confirming any booking.\n3. If the requested slot is busy, suggest 2-3 nearby available time slots instead.\n4. Before finalizing, confirm all details with the customer in a summary and wait for their \"yes\" before creating the event.\n5. Only create the actual booking using the calendar tool after the customer confirms.\n6. For reschedule/cancel requests, ask for the phone number or existing booking details to identify the appointment, then confirm with the customer before making changes.\n7. Stay within salon business hours (Mon-Thu 10AM-8PM, Fri-Sat 11AM-9PM, Sun closed) — do not book outside these hours.\n8. Never invent availability — always verify through the tool.\n\nRESPONSE FORMAT:\nPlain text only. No markdown, asterisks, or headers.\n\nTONE:\nWarm, professional, efficient, and reassuring.\nWhen a booking is successfully created, after your friendly confirmation message to the customer, append this on a new line (this will not be shown to the customer, it's for internal system use):\nIMPORTANT - INTERNAL DATA:\nWhen a booking is successfully created, updated, or cancelled, after your friendly confirmation message to the customer, add a new line and include this exact format (this is for internal system use only, the customer will not see it):\n\nBOOKING_DATA: {\"name\": \"customer name\", \"phone\": \"phone number\", \"service\": \"service name\", \"date\": \"YYYY-MM-DD\", \"time\": \"HH:MM AM/PM\", \"status\": \"confirmed\"}\n\nIf no booking action was completed in this turn (e.g. you are still collecting information, checking availability, or just answering a question), do NOT include the BOOKING_DATA line at all.\nCONVERSATION STYLE:\nDo not ask for all booking details at once in a list. Instead, have a natural conversation and ask ONE question at a time, in this order:\n\n1. First ask: \"What service would you like to book?\"\n2. Once they answer, ask: \"What date would you prefer?\"\n3. Once they answer, ask: \"What time works best for you?\"\n4. Once they answer, ask: \"Could I get your full name?\"\n5. Once they answer, ask: \"And your phone number, please?\"\nIMPORTANT: Before asking any question, check the conversation history first. If the customer has already provided a piece of information (service, date, time, name, or phone), do NOT ask for it again — use what they already told you and move to the next missing detail.\nOnly after collecting all 5 details, check calendar availability, then summarize everything and ask for final confirmation before booking.\n\nKeep each message short and conversational — do not repeat previously collected details unless confirming at the end.\nOUT OF SCOPE:\nDo not handle FAQs, complaints, deals, or general questions — those belong to other agents."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2224,
+        -976
+      ],
+      "id": "a87f1ada-0ec7-44c7-9547-45a058e1e917",
+      "name": "Appointment Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $json.output;\nconst match = output.match(/BOOKING_DATA:\\s*(\\{.*\\})/);\nconst customerMessage = output.split('BOOKING_DATA:')[0].trim();\n\nlet bookingData = null;\nif (match) {\n  bookingData = JSON.parse(match[1]);\n}\n\nreturn {\n  json: {\n    customer_message: customerMessage,\n    booking: bookingData,\n    session_id: $('Webhook').item.json.body.sessionId,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2576,
+        -976
+      ],
+      "id": "908a6fe8-f469-4a9a-8692-11760ea4a6a0",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aece54e9-b77b-4fa1-bfcf-db7d47fa9c97",
+              "leftValue": "={{ $json.booking }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2784,
+        -976
+      ],
+      "id": "5e2033ae-792c-4bef-8945-cc87537d6a15",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ JSON.parse($json.output).response }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2272,
+        1216
+      ],
+      "id": "3c587e03-6d68-47f4-853a-df03f323aab7",
+      "name": "Greetings Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "I understand you'd like to speak with our team directly. You can reach us here:<br><br>\n📞 Call us: <a href=\"tel:+923408700002\">+92 42 3571 0000</a><br>\n💬 Instagram: <a href=\"https://instagram.com/auraandbotanica\" target=\"_blank\">@auraandbotanica</a><br>\n📧 Email: <a href=\"mailto:ayeshahmad1106@gmail.com\">contact@aurabotanica.com</a><br><br>\nOur team is available Monday–Saturday, 10 AM–9 PM, and will be happy to assist you further.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2256,
+        928
+      ],
+      "id": "8e2cda7c-89d1-4df2-bd70-4647ca0f6532",
+      "name": "Human Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "I'm sorry to hear you're facing an issue. Please <a href=\"https://docs.google.com/forms/d/e/1FAIpQLScMieOCOLSS1ibEBq663xrvxvX2v_xOX6_qSPMRdDKa4ILmJA/viewform?usp=publish-editor\" target=\"_blank\">fill out this quick complaint form</a> so our team can look into it properly.<br><br>Our team will personally follow up with you within 24 hours.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2256,
+        688
+      ],
+      "id": "4ca0dfc9-f6fc-4041-9a5c-8a4626068990",
+      "name": "Complaint Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2672,
+        128
+      ],
+      "id": "cd2030dd-4178-4322-89b0-3814157963ef",
+      "name": "Deal Agent Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2592,
+        -512
+      ],
+      "id": "dacf0a06-eee6-484e-9b14-09705eb20ff7",
+      "name": "FAQ Agent response"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.customer_message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3056,
+        -768
+      ],
+      "id": "120ca3b1-a188-4ad0-b9bf-8ba46c9b55ff",
+      "name": "Appointment Agent Response If not urgent"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.customer_message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        3248,
+        -992
+      ],
+      "id": "533584cd-338f-4508-a495-f57353a4c237",
+      "name": "Appointment Agent Response If Urgent"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "ayeshahmad1106@gmail.com",
+          "mode": "list",
+          "cachedResultName": "ayeshahmad1106@gmail.com"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2432,
+        -720
+      ],
+      "id": "1f1f1753-4717-4736-a457-98e9e783ba85",
+      "name": "Check Bookings in GC",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "KpG37QNUgfxI72Z9",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "ayeshahmad1106@gmail.com",
+          "mode": "list",
+          "cachedResultName": "ayeshahmad1106@gmail.com"
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2608,
+        -720
+      ],
+      "id": "0b0211b1-ea9e-40d8-b5f2-c95e510d2577",
+      "name": "Create Booking in GC",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "KpG37QNUgfxI72Z9",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1i1SvU54wPnphkMZOmo-n6KXr3HmWrBq6UZRU3Nv7WBk",
+          "mode": "list",
+          "cachedResultName": "Appointment-Assistant",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i1SvU54wPnphkMZOmo-n6KXr3HmWrBq6UZRU3Nv7WBk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i1SvU54wPnphkMZOmo-n6KXr3HmWrBq6UZRU3Nv7WBk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "session-id": "={{ $json.session_id }}",
+            "name": "={{ $json.booking.name }}",
+            "phone": "={{ $json.booking.phone }}",
+            "services": "={{ $json.booking.service }}",
+            "date": "={{ $json.booking.date }}",
+            "time": "={{ $json.booking.time }}",
+            "status": "={{ $json.booking.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "services",
+              "displayName": "services",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "session-id",
+              "displayName": "session-id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3040,
+        -992
+      ],
+      "id": "587931fe-6fb4-4513-bc45-1da5677e776c",
+      "name": "Append in Appointment-Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zoviDRIyqUPQhKg6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Search the official Aura & Botanica Salon knowledge base for current deals, discounts, promotions, packages, seasonal offers, prices, validity dates, and offer terms.\n\nAlways use this tool before answering a customer question about deals or offers.\n\nOnly provide information that is found in the knowledge base.\nNever invent or assume an offer.",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "salon-deal-assistant",
+          "mode": "list",
+          "cachedResultName": "salon-deal-assistant"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        2560,
+        400
+      ],
+      "id": "d9690e17-4704-44d3-a58e-be46fa7b93cd",
+      "name": "Deal Questioning",
+      "credentials": {
+        "pineconeApi": {
+          "id": "Y5NFZvobxPaWdkWp",
+          "name": "Pinecone account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Search the official Aura & Botanica Salon knowledge base.\n\nUse this tool to retrieve accurate information about salon services, prices, business hours, timings, location, policies, packages, and other salon information.\n\nAlways use this tool before answering a customer question.",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "salon-assistant",
+          "mode": "list",
+          "cachedResultName": "salon-assistant"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        2448,
+        -224
+      ],
+      "id": "0151ab1b-547e-46a7-a841-0e28970dd1b3",
+      "name": "FAQ Questioning",
+      "credentials": {
+        "pineconeApi": {
+          "id": "Y5NFZvobxPaWdkWp",
+          "name": "Pinecone account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Salon Parent Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Salon Parent Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Salon Parent Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Appointment Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "FAQ Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Deal Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Complaint Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Human Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Greetings Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Salon FAQ Insertion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Salon FAQ Insertion",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Salon FAQ Insertion",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FAQ Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "FAQ Questioning",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "FAQ Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salon Parent Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ Agent": {
+      "main": [
+        [
+          {
+            "node": "FAQ Agent response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Deal Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "Deal Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Deal Questioning",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deal Agent": {
+      "main": [
+        [
+          {
+            "node": "Deal Agent Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Salon Deal Ingestion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Salon Deal Ingestion",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Salon Deal Ingestion",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Appointment Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "Appointment Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appointment Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append in Appointment-Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Appointment Agent Response If not urgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Bookings in GC": {
+      "ai_tool": [
+        [
+          {
+            "node": "Appointment Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Booking in GC": {
+      "ai_tool": [
+        [
+          {
+            "node": "Appointment Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append in Appointment-Sheet": {
+      "main": [
+        [
+          {
+            "node": "Appointment Agent Response If Urgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deal Questioning": {
+      "ai_tool": [
+        [
+          {
+            "node": "Deal Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ Questioning": {
+      "ai_tool": [
+        [
+          {
+            "node": "FAQ Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "bd98c1ba-8bda-4d80-9423-e24007703971",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afcba1bbdb8b6a0eb7e86ced4f5a1d206adc62d6de0595ac57f2b38f65f52641"
+  },
+  "nodeGroups": [],
+  "id": "kcGqYUJiMegQKhb4",
+  "tags": []
+}
